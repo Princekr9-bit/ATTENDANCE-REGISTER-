@@ -7,6 +7,14 @@ const admin = require('firebase-admin');
 
 function getApp() {
   if (admin.apps.length) return admin.app();
+  // Preferred method: paste the WHOLE downloaded service account JSON file
+  // content into one env var. This avoids private key corruption issues
+  // that happen when copy-pasting the key on mobile.
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+    const svc = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
+    return admin.initializeApp({ credential: admin.credential.cert(svc) });
+  }
+  // Fallback method: 3 separate env vars.
   const privateKey = (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
   return admin.initializeApp({
     credential: admin.credential.cert({
