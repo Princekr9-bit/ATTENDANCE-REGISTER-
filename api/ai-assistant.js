@@ -101,7 +101,7 @@ Rules:
 - Har function call ke baad, ek chhota sa Hinglish confirmation reply bhi do batate hue kya kiya.
 - Agar kuch samajh na aaye ya galat lage, plain text mein clearly bata do (function mat bulao).`;
 
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-flash-latest';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${useKey}`;
 
     const response = await fetch(url, {
@@ -136,4 +136,3 @@ Rules:
     res.status(500).json({ error: e.message || 'Unknown server error' });
   }
 };
-  
