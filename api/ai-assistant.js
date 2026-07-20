@@ -48,8 +48,21 @@ const TOOLS = [
     }
   },
   {
-    name: "add_todo",
-    description: "Add a to-do task for a specific date.",
+    name: "add_site_task",
+    description: "Add a SITE TASK — a work item tied to a specific construction site (e.g. 'Site A pe cement order karna hai'). Use this when the user mentions a site name, or clearly means site-related work.",
+    parameters: {
+      type: "object",
+      properties: {
+        task: { type: "string" },
+        siteId: { type: "string", description: "Exact site id from the provided list, if a site was mentioned" },
+        date: { type: "string", description: "YYYY-MM-DD, defaults to today" }
+      },
+      required: ["task"]
+    }
+  },
+  {
+    name: "add_personal_todo",
+    description: "Add a PERSONAL to-do reminder — a general task with NO site attached (e.g. 'bank jaana hai', 'phone recharge karna hai'). Use this when the user does NOT mention any site and it's a generic personal reminder, or explicitly says 'to-do list' / 'todo'.",
     parameters: {
       type: "object",
       properties: {
@@ -96,6 +109,7 @@ Rules:
 - Sirf upar diye gaye exact worker/site ids use karo functions mein, kabhi khud se id mat banao.
 - Agar user ka bataya naam kisi worker se clearly match nahi karta, ya 2+ workers match karte hain (ambiguous), to koi function mat bulao — iske bajaye plain text mein user se pooch lo ki kaunsa worker (options list karo).
 - Agar Labourer/Mason ka Present/Half-day attendance maarna ho aur user ne site nahi bataya, to site ke baare mein pooch lo, khud se mat chuno.
+- TASK vs TO-DO: agar user kisi site ka naam le (ya kaam kisi site se juda ho) to add_site_task use karo. Agar user "to-do list" ya "todo" bole, ya kaam generic/personal ho (koi site nahi), to add_personal_todo use karo. In dono ko kabhi mix mat karo.
 - Ek message mein multiple actions ho sakte hain (jaise 2 logo ka attendance ek saath) — utne functions call karo.
 - Jab sab kuch clear ho, seedha function(s) call karo, extra confirmation mat maango.
 - Har function call ke baad, ek chhota sa Hinglish confirmation reply bhi do batate hue kya kiya.
@@ -136,3 +150,4 @@ Rules:
     res.status(500).json({ error: e.message || 'Unknown server error' });
   }
 };
+                                                             
