@@ -71,7 +71,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const tokensSnap = await db.collection('pushTokens').get();
+    const tokensSnap = await db.collection('pushTokens').limit(5000).get();
     const tokenEntries = tokensSnap.docs
       .map((d) => ({ id: d.id, token: d.data().token }))
       .filter((e) => e.token);
@@ -182,4 +182,3 @@ module.exports = async (req, res) => {
     res.status(500).json({ error: 'internal_error' });
   }
 };
-            
